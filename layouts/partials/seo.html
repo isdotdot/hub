@@ -1,0 +1,36 @@
+{{- $title := .Title -}}
+{{- $siteTitle := .Site.Title -}}
+{{- $fullTitle := cond (ne $title "") (printf "%s · %s" $title $siteTitle) $siteTitle -}}
+{{- $desc := cond (ne .Description "") .Description .Site.Params.description -}}
+{{- $url := .Permalink -}}
+{{- $image := .Site.Params.defaultSocialImage -}}
+
+<link rel="canonical" href="{{ $url }}"/>
+<meta name="description" content="{{ $desc }}"/>
+
+<!-- Open Graph -->
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:title" content="{{ $fullTitle }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:url" content="{{ $url }}">
+{{- with $image }}<meta property="og:image" content="{{ . }}">{{ end }}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ $fullTitle }}">
+<meta name="twitter:description" content="{{ $desc }}">
+{{- with .Site.Params.twitterHandle }}<meta name="twitter:site" content="{{ . }}">{{ end }}
+{{- with $image }}<meta name="twitter:image" content="{{ . }}">{{ end }}
+
+{{- if .IsHome }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "isdotdot",
+  "url": "https://isdotdot.com/",
+  "description": "{{ $desc }}",
+  "sameAs": []
+}
+</script>
+{{- end }}

@@ -1,0 +1,68 @@
+{{ define "main" }}
+<section class="card-grid">
+  {{ range .Site.Params.sites }}
+  <article class="site-card">
+    <h2>{{ .title }}</h2>
+    <p>{{ .summary }}</p>
+    <a class="primary-link" href="{{ .url }}">
+      Visit {{ .key }}.isdotdot.com <span class="arrow">→</span>
+    </a>
+  </article>
+  {{ end }}
+</section>
+
+<section>
+  <h2 class="section-title">From around the network</h2>
+  <p class="subtext">A few recent posts pulled from the microsites (random each page load).</p>
+  <ul id="random-posts">
+    <li style="color:#9ca3af; font-size:0.85rem;">Loading posts…</li>
+  </ul>
+</section>
+
+<script>
+  const feeds = [
+    { label: "Why Things Happen", url: "https://why.isdotdot.com/index.xml" },
+    { label: "What Things Mean", url: "https://what.isdotdot.com/index.xml" },
+    { label: "Who People Are",  url: "https://who.isdotdot.com/index.xml" },
+    { label: "How Things Work", url: "https://how.isdotdot.com/index.xml" }
+  ];
+
+  async function loadRandomPosts() {
+    const container = document.getElementById("random-posts");
+    if (!container) return;
+    container.innerHTML = "";
+
+    for (const feed of feeds) {
+      try {
+        const res = await fetch(feed.url);
+        if (!res.ok) continue;
+        const text = await res.text();
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(text, "application/xml");
+        const items = Array.from(xml.querySelectorAll("item"));
+        if (!items.length) continue;
+        const item = items[Math.floor(Math.random() * items.length)];
+        const title = item.querySelector("title")?.textContent || "Untitled";
+        const link = item.querySelector("link")?.textContent || feed.url;
+        const date = item.querySelector("pubDate")?.textContent || "";
+
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span class="site-label">${feed.label}</span><br>
+          <a href="${link}">${title}</a>
+          ${date ? `<span class="date">${date}</span>` : ""}
+        `;
+        container.appendChild(li);
+      } catch (e) {
+        console.error("Feed error for", feed.url, e);
+      }
+    }
+
+    if (!container.children.length) {
+      container.innerHTML = '<li style="color:#9ca3af; font-size:0.85rem;">No posts available yet.</li>';
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", loadRandomPosts);
+</script>
+{{ end }}

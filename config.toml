@@ -1,0 +1,40 @@
+baseURL = "https://isdotdot.com/"
+languageCode = "en-us"
+title = "isdotdot"
+paginate = 10
+enableRobotsTXT = true
+
+[params]
+  tagline = "Simple answers to everyday questions."
+  description = "isdotdot is a tiny network of sites that explain why things happen, what things mean, who people are, and how things work."
+  twitterHandle = "@your_twitter_here" # optional
+  defaultSocialImage = "https://isdotdot.com/images/social-default.png" # optional
+
+  [[params.sites]]
+    key = "why"
+    title = "Why Things Happen"
+    url = "https://why.isdotdot.com/"
+    summary = "Friendly, simple explanations for everyday 'why does...?' questions."
+
+  [[params.sites]]
+    key = "what"
+    title = "What Things Mean"
+    url = "https://what.isdotdot.com/"
+    summary = "Clear answers to everyday 'what is...?' questions."
+
+  [[params.sites]]
+    key = "who"
+    title = "Who People Are"
+    url = "https://who.isdotdot.com/"
+    summary = "Short profiles and quick histories answering 'Who is...?' questions."
+
+  [[params.sites]]
+    key = "how"
+    title = "How Things Work"
+    url = "https://how.isdotdot.com/"
+    summary = "Simple, practical guides explaining how things work and how to do things."
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  section = ["HTML", "RSS"]
+  page = ["HTML"]
